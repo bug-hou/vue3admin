@@ -1,34 +1,45 @@
 <template>
 	<div id="nav">
-		<router-link to="/">Home</router-link> |
-		<router-link to="/about">About</router-link>
+		<el-button>Default</el-button>
+		<el-button type="primary">Primary</el-button>
+		<el-button type="success">Success</el-button>
+		<el-button type="info">Info</el-button>
+		<el-button type="warning">Warning</el-button>
+		<el-button type="danger">Danger</el-button>
+		<el-button>中文</el-button>
+		<el-card class="box-card">
+			<template #header>
+				<div class="card-header">
+					<span>Card name</span>
+					<el-button class="button" type="text">Operation button</el-button>
+				</div>
+			</template>
+			<div v-for="o in 4" :key="o" class="text item">{{ "List item " + o }}</div>
+		</el-card>
 	</div>
 	<router-view />
 </template>
 
 <script lang="ts" setup>
-import {} from "vue";
+import { defineComponent } from "vue";
 </script>
 
 <style lang="less" scope>
-#app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+.card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-#nav {
-	padding: 30px;
+.text {
+	font-size: 14px;
+}
 
-	a {
-		font-weight: bold;
-		color: #2c3e50;
+.item {
+	margin-bottom: 18px;
+}
 
-		&.router-link-exact-active {
-			color: #42b983;
-		}
-	}
+.box-card {
+	width: 480px;
 }
 </style>
