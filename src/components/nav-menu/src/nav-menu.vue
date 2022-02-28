@@ -2,32 +2,36 @@
 <template>
 	<div class="nav-menu">
 		<p class="logo iconfont icon-houtai9">
-			<span>BGadmin</span>
+			<span v-show="!isCollapse">BGadmin</span>
 		</p>
 		<el-menu
-			class="menu"
+			class="menu scroll"
 			default-active="2"
 			:collapse="isCollapse"
 			@open="handleOpen"
 			@close="handleClose"
+			:unique-opened="false"
 		>
-			<el-sub-menu index="1">
-				<template #title>
-					<el-icon><location /></el-icon>
-					<span>Navigator One</span>
+			<template v-for="(item, index) in menus" :key="item.id">
+				<template v-if="item.type === 1">
+					<el-sub-menu :index="index + 1 + ''">
+						<template #title>
+							<i class="iconfont" v-icon="item.icon"></i>
+							<span>{{ item.name }}</span>
+						</template>
+						<template v-for="(subItem, ind) in item.children" :key="subItem.id">
+							<el-menu-item :index="index + 1 + '' + (ind + 1)">
+								<span>{{ subItem.name }}</span>
+							</el-menu-item>
+						</template>
+					</el-sub-menu>
 				</template>
-				<el-menu-item-group title="Group One">
-					<el-menu-item index="1-1">item one</el-menu-item>
-					<el-menu-item index="1-2">item one</el-menu-item>
-				</el-menu-item-group>
-				<el-menu-item-group title="Group Two">
-					<el-menu-item index="1-3">item three</el-menu-item>
-				</el-menu-item-group>
-				<el-sub-menu index="1-4">
-					<template #title>item four</template>
-					<el-menu-item index="1-4-1">item one</el-menu-item>
-				</el-sub-menu>
-			</el-sub-menu>
+				<template v-else>
+					<el-menu-item :index="index + 1 + ''">
+						<span>{{ item.name }}</span>
+					</el-menu-item>
+				</template>
+			</template>
 		</el-menu>
 	</div>
 </template>
@@ -45,16 +49,27 @@ import { defineComponent, ref, computed } from "vue";
 import { useStore } from "@/store";
 
 // 自定义组件引入
-import { Location } from "@element-plus/icons-vue";
 export default defineComponent({
 	name: "nav-menu",
 	inheritAttrs: true,
-	components: {
-		Location,
+	props: {
+		isCollapse: {
+			defualt: false,
+			type: Boolean,
+		},
+	},
+	directives: {
+		icon: {
+			mounted(el, { value }) {
+				if (typeof value === "string") {
+					const icon = "icon-" + value.split("-").pop();
+					el.classList.add(icon);
+				}
+			},
+		},
 	},
 	setup() {
 		const store = useStore();
-		const isCollapse = ref(false);
 		const handleOpen = (key: string, keyPath: string[]) => {
 			console.log(key, keyPath);
 		};
@@ -66,7 +81,6 @@ export default defineComponent({
 			return store.state.login.menus;
 		});
 		return {
-			isCollapse,
 			menus,
 			handleOpen,
 			handleClose,
@@ -83,6 +97,7 @@ export default defineComponent({
 		height: 30px;
 		line-height: 30px;
 		color: #2ebf91;
+		cursor: pointer;
 		span {
 			margin-left: 15px;
 			color: #555;
@@ -90,6 +105,12 @@ export default defineComponent({
 	}
 	.menu {
 		background: rgb(211, 220, 230);
+		width: 100%;
+		border: none;
+		.iconfont {
+			padding-right: 10px;
+			font-size: 18px;
+		}
 	}
 }
 </style>

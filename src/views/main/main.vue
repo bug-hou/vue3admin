@@ -1,10 +1,12 @@
 <template>
 	<el-container class="main">
-		<el-aside width="200px" class="aside">
-			<nav-menu-vue></nav-menu-vue>
+		<el-aside :width="isCollapse ? '60px' : '200px'" class="aside scroll">
+			<nav-menu-vue :is-collapse="isCollapse"></nav-menu-vue>
 		</el-aside>
 		<el-container>
-			<el-header class="page-header">Header</el-header>
+			<el-header class="page-header">
+				<nav-header-vue @collapse="collapseHandle"></nav-header-vue>
+			</el-header>
 			<el-main class="page-content">Main</el-main>
 		</el-container>
 	</el-container>
@@ -17,13 +19,25 @@
  * @Description: 创建一个main组件
  */
 // 从下载的组件中导入函数
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { navMenuVue } from "@/components/nav-menu";
+import { navHeaderVue } from "@/components/nav-header";
 export default defineComponent({
 	name: "main",
 	components: {
 		navMenuVue,
+		navHeaderVue,
+	},
+	setup() {
+		const isCollapse = ref(false);
+		const collapseHandle = (payload: boolean) => {
+			isCollapse.value = payload;
+		};
+		return {
+			isCollapse,
+			collapseHandle,
+		};
 	},
 });
 </script>
@@ -33,9 +47,10 @@ export default defineComponent({
 	height: 100%;
 	.aside {
 		background: rgb(211, 220, 230);
+		transition: width 0.5s;
 	}
 	.page-header {
-		height: 50px;
+		height: 40px;
 		background: white;
 	}
 	.page-content {

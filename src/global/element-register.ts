@@ -1,6 +1,5 @@
 import {
 	ElButton,
-	ElCard,
 	ElTabPane,
 	ElTabs,
 	ElIcon,
@@ -17,13 +16,14 @@ import {
 	ElMenuItem,
 	ElMenuItemGroup,
 	ElSubMenu,
+	ElBreadcrumb,
+	ElBreadcrumbItem,
 } from "element-plus/lib/components";
 import { App } from "vue";
 import "element-plus/theme-chalk/base.css";
 
 const components = [
 	ElButton,
-	ElCard,
 	ElTabPane,
 	ElTabs,
 	ElIcon,
@@ -40,6 +40,8 @@ const components = [
 	ElMenuItem,
 	ElMenuItemGroup,
 	ElSubMenu,
+	ElBreadcrumb,
+	ElBreadcrumbItem,
 ];
 
 export default (app: App) => {

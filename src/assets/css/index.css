@@ -1,5 +1,5 @@
 @import url(./reset.css);
-@import url(//at.alicdn.com/t/font_3208040_10y2cetimsxn.css);
+@import url(//at.alicdn.com/t/font_3208040_lh453cm9g2.css);
 
 body,
 html,
@@ -7,7 +7,11 @@ html,
 	width: 100%;
 	height: 100%;
 }
-
+.scroll {
+	overflow: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
 .scroll::-webkit-scrollbar {
 	/*滚动条整体样式*/
 	width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
