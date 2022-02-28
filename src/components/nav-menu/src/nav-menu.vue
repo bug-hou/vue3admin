@@ -4,14 +4,7 @@
 		<p class="logo iconfont icon-houtai9">
 			<span v-show="!isCollapse">BGadmin</span>
 		</p>
-		<el-menu
-			class="menu scroll"
-			default-active="2"
-			:collapse="isCollapse"
-			@open="handleOpen"
-			@close="handleClose"
-			:unique-opened="false"
-		>
+		<el-menu class="menu scroll" default-active="2" :collapse="isCollapse" :unique-opened="false">
 			<template v-for="(item, index) in menus" :key="item.id">
 				<template v-if="item.type === 1">
 					<el-sub-menu :index="index + 1 + ''">
@@ -20,7 +13,7 @@
 							<span>{{ item.name }}</span>
 						</template>
 						<template v-for="(subItem, ind) in item.children" :key="subItem.id">
-							<el-menu-item :index="index + 1 + '' + (ind + 1)">
+							<el-menu-item :index="index + 1 + '' + (ind + 1)" @click="clickItemHandle(subItem)">
 								<span>{{ subItem.name }}</span>
 							</el-menu-item>
 						</template>
@@ -44,6 +37,7 @@
  */
 // 从下载的组件中导入函数
 import { defineComponent, ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 // 自定义方法引入
 import { useStore } from "@/store";
@@ -70,20 +64,20 @@ export default defineComponent({
 	},
 	setup() {
 		const store = useStore();
-		const handleOpen = (key: string, keyPath: string[]) => {
-			console.log(key, keyPath);
-		};
-		const handleClose = (key: string, keyPath: string[]) => {
-			console.log(key, keyPath);
-		};
+		const router = useRouter();
 
 		const menus = computed(() => {
 			return store.state.login.menus;
 		});
+
+		const clickItemHandle = (subItem: any) => {
+			router.push({
+				path: subItem.url ?? "/not-found",
+			});
+		};
 		return {
 			menus,
-			handleOpen,
-			handleClose,
+			clickItemHandle,
 		};
 	},
 });

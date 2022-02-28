@@ -4,30 +4,41 @@ import main from "views/main/main.vue";
 import { useLocalStorage } from "@/hooks";
 
 const routes: Array<RouteRecordRaw> = [
-	{
-		path: "/main",
-		component: main,
-		name: "main",
-	},
-	{
-		path: "/",
-		name: "login",
-		component: () => import("views/login/login.vue"),
-		alias: "/login",
-	},
+  {
+    path: "",
+    redirect: "/main",
+  },
+  {
+    path: "/main",
+    component: main,
+    name: "main",
+    children: []
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("views/login/login.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("views/not-found/not-found.vue")
+  }
 ];
 
 const router = createRouter({
-	history: createWebHistory(process.env.BASE_URL),
-	routes,
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
 });
+
 router.beforeEach((to, from) => {
-	if (to.path !== "/login") {
-		const token = useLocalStorage("token");
-		if (!token) {
-			return "/login";
-		}
-	}
+  if (to.path !== "/login") {
+    const token = useLocalStorage("token");
+    if (!token) {
+      return "/login";
+    }
+  }
 });
+
+export function createRoutes() { }
 
 export default router;
