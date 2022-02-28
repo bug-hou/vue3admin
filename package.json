@@ -11,6 +11,7 @@
 		"commit": "cz"
 	},
 	"dependencies": {
+		"@element-plus/icons-vue": "^1.0.0",
 		"axios": "^0.26.0",
 		"core-js": "^3.6.5",
 		"element-plus": "^2.0.2",
