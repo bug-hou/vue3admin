@@ -19,7 +19,7 @@ function dataHandle(fns: any) {
 	return stores;
 }
 
-export const useVuex = (type: ITypes, names: any, modelName: string) => {
+export const useVuex = (type: ITypes, names: any, modelName?: string) => {
 	let fns;
 	let stores;
 	switch (type) {

@@ -18,6 +18,15 @@ import {
 	ElSubMenu,
 	ElBreadcrumb,
 	ElBreadcrumbItem,
+	ElDropdown,
+	ElDropdownItem,
+	ElDropdownMenu,
+	ElAvatar,
+	ElSelect,
+	ElOption,
+	ElDatePicker,
+	ElTable,
+	ElTableColumn,
 } from "element-plus/lib/components";
 import { App } from "vue";
 import "element-plus/theme-chalk/base.css";
@@ -42,6 +51,15 @@ const components = [
 	ElSubMenu,
 	ElBreadcrumb,
 	ElBreadcrumbItem,
+	ElDropdown,
+	ElDropdownItem,
+	ElDropdownMenu,
+	ElAvatar,
+	ElSelect,
+	ElOption,
+	ElDatePicker,
+	ElTable,
+	ElTableColumn,
 ];
 
 export default (app: App) => {

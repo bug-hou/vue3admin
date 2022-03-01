@@ -3,11 +3,15 @@
 	<div class="nav-header">
 		<p :class="['iconfont', showIcon]" @click="changeIconHandle"></p>
 		<el-breadcrumb class="breadcrumb" :separator-icon="ArrowRight">
-			<el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-			<el-breadcrumb-item>promotion management</el-breadcrumb-item>
-			<el-breadcrumb-item>promotion list</el-breadcrumb-item>
-			<el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+			<template v-for="item in $route.meta.breadcrumb as any" :key="item.name"
+				><el-breadcrumb-item :to="{ path: item?.path }">{{
+					item.name
+				}}</el-breadcrumb-item></template
+			>
 		</el-breadcrumb>
+		<div class="notify">
+			<user-info-vue></user-info-vue>
+		</div>
 	</div>
 </template>
 
@@ -19,16 +23,21 @@
  */
 type IIcon = "icon-zhankai" | "icon-zhankai-copy";
 // 从下载的组件中导入函数
-import { defineComponent, ref } from "vue";
+import { defineComponent, PropType, reactive, ref } from "vue";
 
 // 自定义方法引入
+import { IBreadcrumb } from "../type/type";
 
 // 自定义组件引入
+import userInfoVue from "./user-info.vue";
 import { ArrowRight } from "@element-plus/icons-vue";
 export default defineComponent({
 	name: "nav-header",
 	inheritAttrs: true,
 	emits: ["collapse"],
+	components: {
+		userInfoVue,
+	},
 	setup(_, { emit }) {
 		const showIcon = ref<IIcon>("icon-zhankai");
 		const changeIconHandle = () => {
@@ -49,9 +58,14 @@ export default defineComponent({
 	height: 100%;
 	display: flex;
 	align-items: center;
+	position: relative;
 	p.iconfont {
 		font-size: 20px;
 		margin-right: 20px;
+	}
+	.notify {
+		position: absolute;
+		right: 10px;
 	}
 }
 </style>

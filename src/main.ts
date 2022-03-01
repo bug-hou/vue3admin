@@ -6,13 +6,17 @@ import { setupStore } from "./store";
 
 import "./assets/css/index.css";
 
-import register from "./global/element-register";
+import { registerElement, registerDirective } from "./global";
 
 const app = createApp(App);
-app.use(router);
+
 app.use(store);
+// 先在router初始化之前组册动态路由
 setupStore();
-app.use(register);
+// 初始化路由
+app.use(router);
+app.use(registerElement);
+app.use(registerDirective);
 app.mount("#app");
 
 // console.log(process.env);

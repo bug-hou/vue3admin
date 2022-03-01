@@ -7,7 +7,7 @@
 			<el-header class="page-header">
 				<nav-header-vue @collapse="collapseHandle"></nav-header-vue>
 			</el-header>
-			<el-main class="page-content">
+			<el-main class="page-content scroll">
 				<router-view></router-view>
 			</el-main>
 		</el-container>
@@ -26,7 +26,7 @@ import { defineComponent, ref } from "vue";
 import { navMenuVue } from "@/components/nav-menu";
 import { navHeaderVue } from "@/components/nav-header";
 export default defineComponent({
-	name: "main",
+	name: "mainVue",
 	components: {
 		navMenuVue,
 		navHeaderVue,
