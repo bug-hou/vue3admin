@@ -26,7 +26,9 @@
 		"types": ["webpack-env"],
 		// 路径解析
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["src/*"],
+			"views": ["src/views"],
+			"hooks": ["src/hooks"]
 		},
 		// 指定项目中可以使用那些库的类型
 		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]

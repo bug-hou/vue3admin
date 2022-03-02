@@ -1,22 +1,17 @@
 <!-- user -->
 <template>
 	<div class="user">
-		<page-search-vue :search-form-config="formItems"></page-search-vue>
-		<div class="content">
-			<bg-table :data-list="userList" :prop-list="propList">
-				<template #enable="{ title }">
-					<el-button :type="title == 1 ? 'success' : 'danger'">
-						{{ title == 1 ? "启用" : "禁用" }}
-					</el-button>
-				</template>
-				<template #createAt="{ title }">
-					<span v-format="title"></span>
-				</template>
-				<template #updateAt="{ title }">
-					<span v-format="title"></span>
-				</template>
-			</bg-table>
-		</div>
+		<page-search-vue
+			:search-form-config="formItems"
+			@search-click="searchClickHandle"
+			@reset-click="resetClickHandle"
+		></page-search-vue>
+		<page-content
+			:prop-list="propList"
+			pageName="user"
+			headerTitle="用户列表"
+			ref="pageContentRef"
+		></page-content>
 	</div>
 </template>
 
@@ -27,17 +22,18 @@
  * @Description: 创建一个user组件
  */
 // 从下载的组件中导入函数
-import { defineComponent, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { defineComponent, isProxy, ref, watch } from "vue";
+
 // 自定义方法引入
-import { useVuex } from "@/hooks";
+import { usePageSearch } from "@/views/main/hooks/usePageSearch";
 
 // 自定义组件引入
 import type { IFormItem } from "@/bgui/form";
 import { pageSearchVue } from "@/components/page-search";
-import { bgTable } from "@/bgui/table";
+import { pageContent } from "@/components/page-content";
 import type { IPropList } from "@/bgui/table";
 
+// pageSearch中的数据
 const formItems: IFormItem[] = [
 	{
 		label: "ID",
@@ -47,13 +43,6 @@ const formItems: IFormItem[] = [
 		field: "id",
 	},
 	{
-		label: "密码",
-		placeholder: "请输入密码",
-		rules: [],
-		type: "input",
-		field: "password",
-	},
-	{
 		label: "用户名",
 		placeholder: "请输入用户名",
 		rules: [],
@@ -61,21 +50,35 @@ const formItems: IFormItem[] = [
 		field: "name",
 	},
 	{
-		label: "喜欢的运动",
-		placeholder: "请选择运动",
+		label: "真实姓名",
+		placeholder: "请输入真实姓名",
+		rules: [],
+		type: "input",
+		field: "realname",
+	},
+	{
+		label: "手机号码",
+		placeholder: "请输入手机号码",
+		rules: [],
+		type: "input",
+		field: "cellphone",
+	},
+	{
+		label: "用户状态",
+		placeholder: "请选择用户状态",
 		rules: [],
 		type: "select",
 		options: [
 			{
-				label: "篮球",
-				value: "篮球",
+				value: "1",
+				label: "启用",
 			},
 			{
-				label: "篮球",
-				value: "篮球",
+				value: "0",
+				label: "禁用",
 			},
 		],
-		field: "sport",
+		field: "enable",
 	},
 	{
 		label: "创建时间",
@@ -85,7 +88,51 @@ const formItems: IFormItem[] = [
 			startPlaceholder: "开始时间",
 			endPlaceholder: "结束时间",
 		},
-		field: "createTime",
+		field: "createAt",
+	},
+];
+// pageContent中的数据
+const propList: IPropList[] = [
+	{
+		prop: "name",
+		label: "用户名",
+		minWidth: "150",
+	},
+	{
+		prop: "realname",
+		label: "真实姓名",
+		minWidth: "100",
+	},
+	{
+		prop: "cellphone",
+		label: "手机号码",
+		minWidth: "120",
+	},
+	{
+		prop: "enable",
+		label: "状态",
+		minWidth: "100",
+		button: true,
+	},
+	{
+		prop: "roleId",
+		label: "权限",
+		minWidth: "60",
+	},
+	{
+		prop: "createAt",
+		label: "创建时间",
+		minWidth: "200",
+	},
+	{
+		prop: "updateAt",
+		label: "更新时间",
+		minWidth: "200",
+	},
+	{
+		prop: "handle",
+		label: "操作",
+		minWidth: "120",
 	},
 ];
 
@@ -94,76 +141,21 @@ export default defineComponent({
 	inheritAttrs: true,
 	components: {
 		pageSearchVue,
-		bgTable,
+		pageContent,
 	},
 	setup() {
-		const store = useStore();
-
-		store.dispatch("system/getPageList", {
-			pageUrl: "/users/list",
-			queryInfo: {
-				offset: 0,
-				size: 10,
-			},
-		});
-
-		const { userList, userCount } = useVuex("state", ["userList", "userCount"], "system") as any;
-
-		const propList: IPropList[] = [
-			{
-				prop: "name",
-				label: "用户名",
-				minWidth: "150",
-			},
-			{
-				prop: "realname",
-				label: "真实姓名",
-				minWidth: "100",
-			},
-			{
-				prop: "cellphone",
-				label: "手机号码",
-				minWidth: "120",
-			},
-			{
-				prop: "enable",
-				label: "状态",
-				minWidth: "100",
-				button: true,
-			},
-			{
-				prop: "roleId",
-				label: "权限",
-				minWidth: "100",
-			},
-			{
-				prop: "createAt",
-				label: "创建时间",
-				minWidth: "250",
-			},
-			{
-				prop: "updateAt",
-				label: "更新时间",
-				minWidth: "250",
-			},
-		];
+		const { pageContentRef, searchClickHandle, resetClickHandle } = usePageSearch();
 		return {
 			formItems,
-			// ...stores,
-			userList,
-			userCount,
 			propList,
+			pageContentRef,
+			searchClickHandle,
+			resetClickHandle,
 		};
 	},
 });
 </script>
 <style scoped lang="less">
 .user {
-	.content {
-		margin-top: 20px;
-		padding: 10px;
-		box-sizing: border-box;
-		background: white;
-	}
 }
 </style>

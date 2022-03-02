@@ -27,6 +27,10 @@ import {
 	ElDatePicker,
 	ElTable,
 	ElTableColumn,
+	ElPagination,
+	ElConfigProvider,
+	ElTooltip,
+	ElImage,
 } from "element-plus/lib/components";
 import { App } from "vue";
 import "element-plus/theme-chalk/base.css";
@@ -60,6 +64,10 @@ const components = [
 	ElDatePicker,
 	ElTable,
 	ElTableColumn,
+	ElPagination,
+	ElConfigProvider,
+	ElTooltip,
+	ElImage,
 ];
 
 export default (app: App) => {

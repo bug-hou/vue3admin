@@ -15,7 +15,9 @@ app.use(store);
 setupStore();
 // 初始化路由
 app.use(router);
+// 注册element组件
 app.use(registerElement);
+// 注册指令
 app.use(registerDirective);
 app.mount("#app");
 

@@ -89,6 +89,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const formData = ref({ ...props.modelValue });
 
+		const resetHandle = () => {
+			for (const key in formData.value) {
+				formData.value[key] = "";
+			}
+		};
+
 		watch(
 			formData,
 			(newValue) => {
@@ -100,6 +106,7 @@ export default defineComponent({
 		);
 		return {
 			formData,
+			resetHandle,
 		};
 	},
 });

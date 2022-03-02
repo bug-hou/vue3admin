@@ -3,9 +3,14 @@ import ElementRegister from "./element-register";
 import directiveRegister from "./directive-register";
 
 export const registerElement = (app: App) => {
-  ElementRegister(app);
+	ElementRegister(app);
 };
 
 export const registerDirective = (app: App) => {
-  directiveRegister(app);
+	directiveRegister(app);
+};
+
+export default (app: App) => {
+	directiveRegister(app);
+	ElementRegister(app);
 };

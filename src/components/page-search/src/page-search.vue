@@ -1,12 +1,16 @@
 <!-- page-search -->
 <template>
 	<div class="page-search">
-		<bg-form :form-items="searchFormConfig" v-model="formData">
+		<bg-form :form-items="searchFormConfig" v-model="formData" ref="formRef">
 			<template #header> <h2>高级检索</h2> </template>
 			<template #footer>
 				<div class="buttons">
-					<el-button type="success">重置</el-button>
-					<el-button type="primary">搜索</el-button>
+					<el-button type="success" @click="resetHandle">
+						<p class="iconfont icon-reset">重置</p>
+					</el-button>
+					<el-button type="primary" @click="searchHandle">
+						<p class="iconfont icon-sousuo">搜索</p>
+					</el-button>
 				</div>
 			</template>
 		</bg-form>
@@ -30,6 +34,7 @@ import type { IFormItem } from "@/bgui/form";
 export default defineComponent({
 	name: "page-search",
 	inheritAttrs: true,
+	emits: ["searchClick", "resetClick"],
 	components: {
 		bgForm,
 	},
@@ -39,16 +44,30 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	setup() {
-		const formData = ref({
-			id: "",
-			name: "",
-			password: "",
-			sport: "",
-			createTime: "",
-		});
+	setup(props, { emit }) {
+		// 动态添加绑定ref的属性
+		var obj = {};
+		props.searchFormConfig.map((item) => item.field).forEach((item) => (obj[item] = ""));
+
+		const formData = ref(obj);
+
+		const formRef = ref<InstanceType<typeof bgForm>>();
+
+		const resetHandle = () => {
+			for (const key in formData.value) {
+				formData.value[key] = "";
+			}
+			emit("resetClick");
+		};
+
+		const searchHandle = () => {
+			emit("searchClick", formData.value);
+		};
 		return {
 			formData,
+			formRef,
+			resetHandle,
+			searchHandle,
 		};
 	},
 });
@@ -66,6 +85,11 @@ export default defineComponent({
 		justify-content: end;
 		padding-right: 30px;
 		padding-bottom: 10px;
+	}
+	.iconfont {
+		&::before {
+			margin-right: 3px;
+		}
 	}
 }
 </style>
