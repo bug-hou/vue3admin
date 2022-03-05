@@ -16,3 +16,7 @@ export const useLocalStorage = (key: string, value?: any) => {
 export const useClearStorage = () => {
 	window.localStorage.clear();
 };
+
+export function useDeleteStorage(key: string) {
+	window.localStorage.removeItem(key);
+}

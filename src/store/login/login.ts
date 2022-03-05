@@ -8,6 +8,7 @@ import type { IAccount } from "@/service/login/login";
 import { useLocalStorage } from "@/hooks";
 import router from "@/router";
 import { mapRoutes } from "@/utils/mapMenu";
+import { mapMenusTopermissions } from "@/utils/mapPermission";
 
 import { ILoginState } from "./type";
 import { IRootState } from "../type";
@@ -18,9 +19,10 @@ const loginModule: Module<ILoginState, IRootState> = {
 		token: "",
 		userInfo: {},
 		menus: {},
+		permissions: [],
 	},
 	actions: {
-		async accountLoginAction({ commit, state }, payload: IAccount) {
+		async accountLoginAction({ commit, dispatch }, payload: IAccount) {
 			// 登录请求，获取到token和id
 			const result = await accountLoginRequest(payload);
 			const { id, token } = result.data.data;
@@ -34,6 +36,8 @@ const loginModule: Module<ILoginState, IRootState> = {
 			const menus = await requestUserMenusByRoled(info.data.data.role.id);
 			commit("saveRoleMenus", menus.data.data);
 			useLocalStorage("menus", menus.data.data);
+			// 请求对应的data数据
+			dispatch("getInitialDataAction", null, { root: true });
 			// 跳转到首页
 			router.push({
 				path: "/main",
@@ -69,6 +73,7 @@ const loginModule: Module<ILoginState, IRootState> = {
 			routes.forEach((item) => {
 				router.addRoute("main", item);
 			});
+			state.permissions = mapMenusTopermissions(state.menus);
 		},
 	},
 };

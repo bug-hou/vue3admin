@@ -30,4 +30,21 @@ export function mapRoutes(menus: any[]): RouteRecordRaw[] {
 	return routes;
 }
 
+export function getMenuLeafKeys(menus: any[]) {
+	const resultKeys = [];
+	const _recurseLefKeys = (menus: any): any => {
+		const abc: any[] = [];
+		menus.forEach((item: any) => {
+			if (item.children) {
+				resultKeys.push(..._recurseLefKeys(item.children));
+			} else {
+				abc.push(item.id);
+			}
+		});
+		return abc;
+	};
+	resultKeys.push(..._recurseLefKeys(menus));
+	return resultKeys;
+}
+
 export { firstMenu };

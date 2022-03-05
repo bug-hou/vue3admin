@@ -8,3 +8,5 @@ declare module "*.vue" {
 declare let $store: {
 	state: any;
 };
+
+declare module "*.json";

@@ -13,7 +13,7 @@
 		</div>
 		<template #dropdown>
 			<el-dropdown-menu>
-				<el-dropdown-item> 退出登录 </el-dropdown-item>
+				<el-dropdown-item @click="exitHandle"> 退出登录 </el-dropdown-item>
 				<el-dropdown-item> 用户信息 </el-dropdown-item>
 				<el-dropdown-item> 系统管理 </el-dropdown-item>
 			</el-dropdown-menu>
@@ -29,9 +29,10 @@
  */
 // 从下载的组件中导入函数
 import { computed, defineComponent } from "vue";
+import { useRouter } from "vue-router";
 
 // 自定义方法引入
-
+import { useDeleteStorage } from "@/hooks";
 // 自定义组件引入
 import { useStore } from "@/store";
 export default defineComponent({
@@ -39,9 +40,17 @@ export default defineComponent({
 	inheritAttrs: true,
 	setup() {
 		const store = useStore();
+		const router = useRouter();
 		const name = computed(() => store.state.login.userInfo.name);
+
+		const exitHandle = () => {
+			useDeleteStorage("token");
+			router.push("/main");
+		};
+
 		return {
 			name,
+			exitHandle,
 		};
 	},
 });

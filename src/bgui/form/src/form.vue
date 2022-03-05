@@ -6,7 +6,7 @@
 		</div>
 		<el-form :label-width="labelWidth" class="forms" :style="{ ['--count']: count }">
 			<template v-for="(item, index) in formItems" :key="index">
-				<el-form-item :label="item.label" :rules="item.rules">
+				<el-form-item :label="item.label" :rules="item.rules" v-if="!item.isHidden">
 					<template v-if="item.type === 'input'">
 						<el-input :placeholder="item.placeholder" v-model="formData[item.field]"></el-input>
 					</template>
@@ -38,6 +38,7 @@
 					<template v-else>
 						<el-input
 							type="password"
+							show-password
 							:placeholder="item.placeholder"
 							v-model="formData[item.field]"
 						></el-input>
@@ -117,7 +118,7 @@ export default defineComponent({
 	padding-top: 20px;
 	.forms {
 		display: grid;
-		grid-template-columns: repeat(var(--count), 30%);
+		grid-template-columns: repeat(var(--count), 1fr);
 		justify-content: space-evenly;
 		align-items: center;
 	}

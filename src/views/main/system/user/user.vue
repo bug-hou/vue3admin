@@ -11,7 +11,10 @@
 			pageName="user"
 			headerTitle="用户列表"
 			ref="pageContentRef"
+			@newBtnClick="newClickHandle"
+			@editBtnClick="editClickHandle"
 		></page-content>
+		<page-modal :form-items="formModelComputed" ref="pageModalRef" :page-name="'user'"></page-modal>
 	</div>
 </template>
 
@@ -22,7 +25,7 @@
  * @Description: 创建一个user组件
  */
 // 从下载的组件中导入函数
-import { defineComponent, isProxy, ref, watch } from "vue";
+import { computed, defineComponent, unref } from "vue";
 
 // 自定义方法引入
 import { usePageSearch } from "@/views/main/hooks/usePageSearch";
@@ -32,6 +35,9 @@ import type { IFormItem } from "@/bgui/form";
 import { pageSearchVue } from "@/components/page-search";
 import { pageContent } from "@/components/page-content";
 import type { IPropList } from "@/bgui/table";
+import pageModal from "@/components/page-modal";
+import { usePageModel } from "../../hooks/usePageModal";
+import { useVuex } from "@/hooks";
 
 // pageSearch中的数据
 const formItems: IFormItem[] = [
@@ -136,21 +142,96 @@ const propList: IPropList[] = [
 	},
 ];
 
+// pageModal中的数据
+const formModel: IFormItem[] = [
+	{
+		label: "name",
+		placeholder: "请输入用户名",
+		field: "name",
+		type: "input",
+	},
+	{
+		label: "realname",
+		placeholder: "请输入真实姓名",
+		field: "realname",
+		type: "input",
+	},
+	{
+		label: "password",
+		placeholder: "请输入密码",
+		field: "password",
+		type: "password",
+		isHidden: false,
+	},
+	{
+		label: "cellphone",
+		placeholder: "请输入电话号码",
+		field: "cellphone",
+		type: "input",
+	},
+	{
+		label: "roleId",
+		placeholder: "请选择角色",
+		field: "roleId",
+		type: "select",
+		options: [],
+	},
+	{
+		label: "departmentId",
+		placeholder: "请选择部门",
+		field: "departmentId",
+		type: "select",
+		options: [],
+	},
+];
+
 export default defineComponent({
 	name: "user",
 	inheritAttrs: true,
 	components: {
 		pageSearchVue,
 		pageContent,
+		pageModal,
 	},
 	setup() {
 		const { pageContentRef, searchClickHandle, resetClickHandle } = usePageSearch();
+		const newCallback = () => {
+			formModel[2].isHidden = false;
+		};
+		const editCallback = () => {
+			formModel[2].isHidden = true;
+		};
+		const { pageModalRef, newClickHandle, editClickHandle } = usePageModel(
+			newCallback,
+			editCallback
+		);
+
+		const formModelComputed = computed(() => {
+			const { entireDepartment, entireRole } = useVuex("state", [
+				"entireDepartment",
+				"entireRole",
+			]) as any;
+			formModel[4].options = unref(entireDepartment).map((item: any) => ({
+				label: item.name,
+				value: item.id,
+			}));
+			formModel[5].options = unref(entireRole).map((item: any) => ({
+				label: item.name,
+				value: item.id,
+			}));
+			return formModel;
+		});
+
 		return {
 			formItems,
 			propList,
+			formModelComputed,
+			pageModalRef,
 			pageContentRef,
 			searchClickHandle,
 			resetClickHandle,
+			newClickHandle,
+			editClickHandle,
 		};
 	},
 });

@@ -31,6 +31,9 @@ import {
 	ElConfigProvider,
 	ElTooltip,
 	ElImage,
+	ElDialog,
+	ElTree,
+	ElCard,
 } from "element-plus/lib/components";
 import { App } from "vue";
 import "element-plus/theme-chalk/base.css";
@@ -68,6 +71,9 @@ const components = [
 	ElConfigProvider,
 	ElTooltip,
 	ElImage,
+	ElDialog,
+	ElTree,
+	ElCard,
 ];
 
 export default (app: App) => {

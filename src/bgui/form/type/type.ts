@@ -19,4 +19,5 @@ export interface IFormItem {
 	type: IFormType;
 	options?: IOption[];
 	otherOptions?: IOtherOpton;
+	isHidden?: boolean;
 }

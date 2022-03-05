@@ -9,7 +9,13 @@
 				</div>
 			</slot>
 		</div>
-		<el-table :data="dataList" border @selection-change="selectionChangeHandle">
+		<el-table
+			:data="dataList"
+			border
+			@selection-change="selectionChangeHandle"
+			row-key="id"
+			:tree-props="{ children: 'children' }"
+		>
 			<el-table-column
 				v-if="showSelectColumn"
 				type="selection"
@@ -32,7 +38,7 @@
 					show-overflow-tooltip
 				>
 					<template #default="{ row }">
-						<slot :name="item.prop" :title="row[item.prop]">
+						<slot :name="item.prop" :title="row[item.prop]" :row="row">
 							<span>{{ row[item.prop] }}</span>
 						</slot>
 					</template>
@@ -40,7 +46,7 @@
 			</template>
 		</el-table>
 		<div class="footer">
-			<slot name="footer">
+			<slot name="footer" v-if="showFooter">
 				<el-pagination
 					v-model:currentPage="currentPage4"
 					v-model:page-size="pageSize4"
@@ -100,6 +106,10 @@ export default defineComponent({
 		dataCount: {
 			type: Number,
 			required: true,
+		},
+		showFooter: {
+			default: true,
+			type: Boolean,
 		},
 	},
 	setup(_, { emit }) {
